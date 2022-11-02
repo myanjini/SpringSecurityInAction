@@ -14,7 +14,6 @@ import com.ssia.services.InMemoryUserDetailsService;
 
 @Configuration
 public class UserManagementConfig {
-
 	@Bean
 	public UserDetailsService userDetailsService() {
 		UserDetails u = new User("john", "12345", "read");

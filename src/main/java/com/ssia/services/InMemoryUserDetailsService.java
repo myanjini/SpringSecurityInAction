@@ -17,10 +17,10 @@ public class InMemoryUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		return users.stream()
-				.filter(u -> u.getUsername().equals(username))
-				.findFirst()
-				.orElseThrow(
-						() -> new UsernameNotFoundException("User not found")
-					);
+			.filter(u -> u.getUsername().equals(username))
+			.findFirst()
+			.orElseThrow(
+					() -> new UsernameNotFoundException("User not found")
+			);
 	}	
 }
