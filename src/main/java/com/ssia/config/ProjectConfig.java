@@ -1,28 +1,25 @@
 package com.ssia.config;
 
-import javax.sql.DataSource;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.ldap.DefaultLdapUsernameToDnMapper;
+import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
+import org.springframework.security.ldap.userdetails.LdapUserDetailsManager;
 
 @Configuration
 public class ProjectConfig {
 
 	@Bean
-	public UserDetailsService userDetailsService(DataSource dataSource) {
-		// return new JdbcUserDetailsManager(dataSource);
+	public UserDetailsService userDetailsService() {
+		var cs = new DefaultSpringSecurityContextSource("ldap://127.0.0.1:33389/dc=springframework,dc=org");
+		cs.afterPropertiesSet();
 		
-		String usersByUsernameQuery = "select username, password, enabled from users where username = ? ";
-		String authsByQueryQuery = "select username, authority from authorities where username = ? ";
-		
-		var userDetailsManager = new JdbcUserDetailsManager(dataSource);
-		userDetailsManager.setUsersByUsernameQuery(usersByUsernameQuery);
-		userDetailsManager.setAuthoritiesByUsernameQuery(authsByQueryQuery);
-		
+		var userDetailsManager = new LdapUserDetailsManager(cs);
+		userDetailsManager.setUsernameMapper(new DefaultLdapUsernameToDnMapper("ou=groups", "uid"));
+		userDetailsManager.setGroupSearchBase("ou=groups");
 		return userDetailsManager;
 	}
 	
