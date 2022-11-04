@@ -1,6 +1,7 @@
 package com.ssia.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,11 +15,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-	@Autowired
 	private UserDetailsService userDetailsService;
+	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	public CustomAuthenticationProvider(@Lazy UserDetailsService userDetailsService, @Lazy PasswordEncoder passwordEncoder) {
+		this.userDetailsService = userDetailsService;
+		this.passwordEncoder = passwordEncoder;
+	}
+	
 	
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
