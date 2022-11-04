@@ -43,10 +43,6 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		Map<String, PasswordEncoder> encoders = new HashMap<>();
-		encoders.put("noop", NoOpPasswordEncoder.getInstance());
-		encoders.put("bcrypt", new BCryptPasswordEncoder());
-		encoders.put("scrypt", new SCryptPasswordEncoder());
-		return new DelegatingPasswordEncoder("bcrypt", encoders);
+		return NoOpPasswordEncoder.getInstance();
 	}
 }
