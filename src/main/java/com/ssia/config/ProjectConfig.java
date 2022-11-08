@@ -36,9 +36,10 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.httpBasic();
 		http.authorizeHttpRequests()
-			.mvcMatchers(HttpMethod.GET, "/a").authenticated()
-			.mvcMatchers(HttpMethod.POST, "/a").permitAll()
-			.anyRequest().denyAll();
+			.mvcMatchers("/a/b/**")
+				.authenticated()
+			.anyRequest()
+				.permitAll();
 		http.csrf().disable();
 	}
 }
