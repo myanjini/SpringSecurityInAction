@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.util.matcher.AnyRequestMatcher;
 
 @Configuration
 public class ProjectConfig extends WebSecurityConfigurerAdapter {
@@ -35,11 +36,10 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.httpBasic();
-		http.authorizeHttpRequests()
-			.mvcMatchers("/a/b/**")
-				.authenticated()
+		http.authorizeRequests()
+			.mvcMatchers("/product/{code:^[0-9]*$}")
+				.permitAll()
 			.anyRequest()
-				.permitAll();
-		http.csrf().disable();
+				.denyAll();
 	}
 }
