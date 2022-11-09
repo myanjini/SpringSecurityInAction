@@ -3,24 +3,24 @@ package com.ssia.filters;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-public class AuthenticationLoggingFilter implements Filter {
+import org.springframework.web.filter.OncePerRequestFilter;
+
+public class AuthenticationLoggingFilter extends OncePerRequestFilter {
 	private final Logger logger = Logger.getLogger(AuthenticationLoggingFilter.class.getName());
 	
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		var httpRequest = (HttpServletRequest) request;
-		var requestId = httpRequest.getHeader("Request-Id");
+		var requestId = request.getHeader("Request-Id");
 		
 		logger.info("Successfully authenticated request with id " + requestId);
 		
 		chain.doFilter(request, response);		
 	}
+
 }
